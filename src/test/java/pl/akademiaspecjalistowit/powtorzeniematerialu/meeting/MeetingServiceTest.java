@@ -89,5 +89,30 @@ class MeetingServiceTest {
         assertThat(allMeetings).hasSize(2);
     }
 
+    @Test
+    void create_meeting_whithout_repeat_email() {
+        // GIVEN
+        String meetingName = "Test Meeting";
+        String meetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = new HashSet<>();
+        participantEmails.add("test@example.com");
+        String meetingDuration = "02:00";
+        Meeting exist =
+                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+
+        String meetingNameNext = "Test Meeting Next";
+        String meetingDateTimeStringNext = "01:03:2024 12:00";
+        Set<String> participantEmailsNext = new HashSet<>();
+        participantEmails.add("test@example.com");
+        String meetingDurationNext = "03:00";
+
+        // WHEN
+        Meeting result =
+                meetingService.createNewMeeting(meetingNameNext, meetingDateTimeStringNext, participantEmailsNext, meetingDurationNext);
+
+        // THEN
+        Meeting emptyMeeting = meetingService.getAllMeetings().get(1);
+        assertThat(emptyMeeting.getParticipantEmail()).hasSize(0);
+    }
 
 }
