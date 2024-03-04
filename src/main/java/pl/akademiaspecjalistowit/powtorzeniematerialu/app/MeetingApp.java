@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingException;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
 
 public class MeetingApp {
@@ -81,11 +83,18 @@ public class MeetingApp {
         System.out.println("Podaj długość trwania spotkania (w formacie HH:MM) ");
         String meetingDuration = scanner.nextLine();
 
+        List<Meeting> allMeetings = meetingService.getAllMeetings();
+
         Set<String> participantEmail = new HashSet<>();
         boolean stop = false;
         while (!stop) {
             System.out.println("Podaj email uczestnika do zaprosznia: ");
-            participantEmail.add(scanner.nextLine());
+            String emailNextPeople = scanner.nextLine();
+            boolean inAllMeetings = checkEmail(emailNextPeople, allMeetings);
+            if (inAllMeetings) {
+                throw new MeetingException("Ten email już jest w jednym ze spotkań. Nie ma możliwości dodać takie spotkanie.");
+            }
+            participantEmail.add(emailNextPeople);
             System.out.println("Chcesz dodać więcej uczestników?: (T/N)");
             String decission = scanner.nextLine();
             if (decission.equals("N")) {
@@ -94,9 +103,21 @@ public class MeetingApp {
         }
 
         Meeting newMeeting =
-            meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
+                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
 
         System.out.println("Spotkanie " + newMeeting + " zostało utworzone.");
+    }
+
+    private boolean checkEmail(String emailNextPeople, List<Meeting> allMeetings) {
+        for (int i = 0; i < allMeetings.size(); i++) {
+            Set<String> nextMeeting = allMeetings.get(i).getParticipantEmail();
+            for (int j = 0; j < nextMeeting.size(); j++) {
+                if (nextMeeting.contains(emailNextPeople)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void deleteMeeting(Scanner scanner) {
