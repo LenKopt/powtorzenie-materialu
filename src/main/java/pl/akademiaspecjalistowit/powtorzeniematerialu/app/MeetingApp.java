@@ -90,10 +90,7 @@ public class MeetingApp {
         while (!stop) {
             System.out.println("Podaj email uczestnika do zaprosznia: ");
             String emailNextPeople = scanner.nextLine();
-            boolean inAllMeetings = checkEmail(emailNextPeople, allMeetings);
-            if (inAllMeetings) {
-                throw new MeetingException("Ten email już jest w jednym ze spotkań. Nie ma możliwości dodać takie spotkanie.");
-            }
+
             participantEmail.add(emailNextPeople);
             System.out.println("Chcesz dodać więcej uczestników?: (T/N)");
             String decission = scanner.nextLine();
@@ -106,18 +103,6 @@ public class MeetingApp {
                 meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
 
         System.out.println("Spotkanie " + newMeeting + " zostało utworzone.");
-    }
-
-    private boolean checkEmail(String emailNextPeople, List<Meeting> allMeetings) {
-        for (int i = 0; i < allMeetings.size(); i++) {
-            Set<String> nextMeeting = allMeetings.get(i).getParticipantEmail();
-            for (int j = 0; j < nextMeeting.size(); j++) {
-                if (nextMeeting.contains(emailNextPeople)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void deleteMeeting(Scanner scanner) {
