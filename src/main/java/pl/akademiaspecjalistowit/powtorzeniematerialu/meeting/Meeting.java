@@ -83,7 +83,7 @@ public class Meeting {
     }
 
     public Set<String> getParticipantEmail() {
-        return participantEmail;
+        return Set.copyOf(participantEmail);
     }
 
     public LocalDateTime getDateAndTime() {
