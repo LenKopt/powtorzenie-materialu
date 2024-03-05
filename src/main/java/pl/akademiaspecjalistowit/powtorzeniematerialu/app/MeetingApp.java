@@ -83,18 +83,14 @@ public class MeetingApp {
         System.out.println("Podaj długość trwania spotkania (w formacie HH:MM) ");
         String meetingDuration = scanner.nextLine();
 
-        List<Meeting> allMeetings = meetingService.getAllMeetings();
-
         Set<String> participantEmail = new HashSet<>();
         boolean stop = false;
         while (!stop) {
             System.out.println("Podaj email uczestnika do zaprosznia: ");
-            String emailNextPeople = scanner.nextLine();
-
-            participantEmail.add(emailNextPeople);
+            participantEmail.add(scanner.nextLine());
             System.out.println("Chcesz dodać więcej uczestników?: (T/N)");
             String decission = scanner.nextLine();
-            if (decission.equals("N")) {
+            if (decission.equals("N")||decission.equals("n")) {
                 stop = true;
             }
         }

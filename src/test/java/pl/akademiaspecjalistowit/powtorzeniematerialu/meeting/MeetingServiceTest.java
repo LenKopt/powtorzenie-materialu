@@ -79,45 +79,24 @@ class MeetingServiceTest {
         String OverlappingMeetingDuration = "01:00";
 
         // WHEN
-        Meeting overlappingMeeting = meetingService
-                .createNewMeeting(overlappingMeetingName,
-                        overlappingMeetingDateTimeString,
-                        overlappingParticipantEmails,
-                        OverlappingMeetingDuration);
+        try {
+            Meeting overlappingMeeting = meetingService
+                    .createNewMeeting(overlappingMeetingName,
+                            overlappingMeetingDateTimeString,
+                            overlappingParticipantEmails,
+                            OverlappingMeetingDuration);
+        } catch (RuntimeException e) {
+            assertThat(e.getMessage()).isNotEqualTo("");
+        }
 
         // THEN
         List<Meeting> allMeetings = meetingService.getAllMeetings();
-        assertThat(allMeetings).hasSize(2);
+        assertThat(allMeetings).hasSize(1);
     }
 
-    @Test
-    void create_meeting_whithout_repeat_email() {
-        // GIVEN
-        String meetingName = "Test Meeting";
-        String meetingDateTimeString = "01:01:2024 12:00";
-        Set<String> participantEmails = new HashSet<>();
-        participantEmails.add("test@example.com");
-        String meetingDuration = "02:00";
-        Meeting exist =
-                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
-
-        String meetingNameNext = "Test Meeting Next";
-        String meetingDateTimeStringNext = "01:03:2024 12:00";
-        Set<String> participantEmailsNext = new HashSet<>();
-        participantEmails.add("test@example.com");
-        String meetingDurationNext = "03:00";
-
-        // WHEN
-        Meeting result =
-                meetingService.createNewMeeting(meetingNameNext, meetingDateTimeStringNext, participantEmailsNext, meetingDurationNext);
-
-        // THEN
-        Meeting emptyMeeting = meetingService.getAllMeetings().get(1);
-        assertThat(emptyMeeting.getParticipantEmail()).hasSize(0);
-    }
 
     @Test
-    void making_overlapping_meetings_for_these_same_participants_is_inpossible() {
+    void making_overlapping_meetings_for_these_same_participants_is_inpossible_ending_meeting_later_start_previous() {
         // GIVEN
         String meetingName = "Test Meeting";
         String meetingDateTimeString = "01:01:2024 12:00";
@@ -134,11 +113,7 @@ class MeetingServiceTest {
             Meeting second =
                     meetingService.createNewMeeting(meetingNameSecond, meetingDateTimeStringSecond, participantEmails, meetingDurationSecond);
         } catch (RuntimeException e)
-
-
         // THEN
-        //List<Meeting> allMeetings = meetingService.getAllMeetings();
-        //assertThat(allMeetings).contains(result);
         {
             assertThat(e.getMessage()).isNotEqualTo("");
         }

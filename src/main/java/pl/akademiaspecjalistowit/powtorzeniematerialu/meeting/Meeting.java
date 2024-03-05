@@ -31,7 +31,7 @@ public class Meeting {
 
     }
 
-    public LocalDateTime parseStringToDate(String dateString) {
+    public static LocalDateTime parseStringToDate(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm");
         try {
             return LocalDateTime.parse(dateString, formatter);
@@ -54,12 +54,12 @@ public class Meeting {
     @Override
     public String toString() {
         return "Meeting{" +
-            "meetingId=" + meetingId +
-            ", name='" + name + '\'' +
-            ", dateAndTime=" + dateAndTime +
-            ", participantEmail=" + participantEmail +
-            ", meetingDuration=" + meetingDuration +
-            '}';
+                "meetingId=" + meetingId +
+                ", name='" + name + '\'' +
+                ", dateAndTime=" + dateAndTime +
+                ", participantEmail=" + participantEmail +
+                ", meetingDuration=" + meetingDuration +
+                '}';
     }
 
     @Override
@@ -72,9 +72,9 @@ public class Meeting {
         }
         Meeting meeting = (Meeting) o;
         return Objects.equals(meetingId, meeting.meetingId) && Objects.equals(name, meeting.name) &&
-            Objects.equals(dateAndTime, meeting.dateAndTime) &&
-            Objects.equals(participantEmail, meeting.participantEmail) &&
-            Objects.equals(meetingDuration, meeting.meetingDuration);
+                Objects.equals(dateAndTime, meeting.dateAndTime) &&
+                Objects.equals(participantEmail, meeting.participantEmail) &&
+                Objects.equals(meetingDuration, meeting.meetingDuration);
     }
 
     @Override
@@ -92,5 +92,14 @@ public class Meeting {
 
     public Duration getMeetingDuration() {
         return meetingDuration;
+    }
+
+    public boolean checkEmailSetsForDuplicates(Meeting other) {
+        for (String email : this.getParticipantEmail()) {
+            if (other.getParticipantEmail().contains(email)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

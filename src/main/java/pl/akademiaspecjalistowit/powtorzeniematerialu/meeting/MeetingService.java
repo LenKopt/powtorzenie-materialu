@@ -15,11 +15,12 @@ public class MeetingService {
 
     public Meeting createNewMeeting(String meetingName, String meetingDateTimeString, Set<String> participantEmail,
                                     String meetingDuration) {
-        boolean inAllMeetings = checkEmail(participantEmail, meetingDateTimeString, meetingDuration);
-        if (inAllMeetings) {
+
+        Meeting meeting = new Meeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
+        boolean meetingsOverlap = checkEmail(participantEmail, meetingDateTimeString, meetingDuration, meeting);
+        if (meetingsOverlap) {
             throw new MeetingException("Ten email już jest w jednym ze spotkań. Nie ma możliwości dodać takie spotkanie.");
         }
-        Meeting meeting = new Meeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
         meetingRepository.save(meeting);
         return meeting;
     }
@@ -29,19 +30,22 @@ public class MeetingService {
         return meetingRepository.findAll();
     }
 
-    private boolean checkEmail(Set<String> emailNextPeople, String meetingDateTimeString, String meetingDuration) {
+    private boolean checkEmail(Set<String> newEmail, String newMeetingDateTimeString, String newMeetingDurationString, Meeting meeting) {
         List<Meeting> allMeetings = getAllMeetings();
         for (int i = 0; i < allMeetings.size(); i++) {
             Meeting nextMeeting = allMeetings.get(i);
-            Set<String> nextMeetingParticipants = nextMeeting.getParticipantEmail();
-            for (int j = 0; j < nextMeetingParticipants.size(); j++) {
-                LocalDateTime timeOfMeeting = nextMeeting.parseStringToDate(meetingDateTimeString);
-                Duration durationOfMeeting = Meeting.parseDurationFromString(meetingDuration);
-                if (nextMeetingParticipants.containsAll(emailNextPeople) &&
-                        (timeOfMeeting.compareTo(nextMeeting.getDateAndTime()) == 1 ||
-                                timeOfMeeting.compareTo(nextMeeting.getDateAndTime()) == 0) &&
-                        (timeOfMeeting.compareTo(nextMeeting.getDateAndTime().plus(nextMeeting.getMeetingDuration())) == -1)
-                ) {
+            Set<String> checkedListParticipantEmails = nextMeeting.getParticipantEmail();
+            for (int j = 0; j < checkedListParticipantEmails.size(); j++) {
+                LocalDateTime startNewMeeting = Meeting.parseStringToDate(newMeetingDateTimeString);
+                Duration newMeetingDuration = Meeting.parseDurationFromString(newMeetingDurationString);
+                LocalDateTime endNewMeeting = startNewMeeting.plus(newMeetingDuration);
+                if (meeting.checkEmailSetsForDuplicates(nextMeeting)) {
+                    if ((startNewMeeting.compareTo(nextMeeting.getDateAndTime()) == -1 &&
+                            endNewMeeting.compareTo(nextMeeting.getDateAndTime()) == -1) ||
+                            (startNewMeeting.compareTo(nextMeeting.getDateAndTime().plus(nextMeeting.getMeetingDuration())) == 1 &&
+                                    endNewMeeting.compareTo(nextMeeting.getDateAndTime().plus(nextMeeting.getMeetingDuration())) == 1)) {
+                        return false;
+                    }
                     return true;
                 }
             }
