@@ -64,7 +64,7 @@ class MeetingServiceTest {
     }
 
     @Test
-    void making_overlapping_meetings_for_these_same_participants_is_possible() {
+    void making_overlapping_meetings_for_these_same_participants_is_inpossible() {
         // GIVEN
         String meetingName = "Test Meeting";
         String meetingDateTimeString = "01:01:2024 12:00";
@@ -94,7 +94,6 @@ class MeetingServiceTest {
         assertThat(allMeetings).hasSize(1);
     }
 
-
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_inpossible_ending_meeting_later_start_previous() {
         // GIVEN
@@ -106,8 +105,8 @@ class MeetingServiceTest {
         Meeting first =
                 meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
         String meetingNameSecond = "Test Meeting 2";
-        String meetingDateTimeStringSecond = "01:01:2024 12:10";
-        String meetingDurationSecond = "02:00";
+        String meetingDateTimeStringSecond = "01:01:2024 11:30";
+        String meetingDurationSecond = "01:00";
         // WHEN
         try {
             Meeting second =
@@ -117,6 +116,71 @@ class MeetingServiceTest {
         {
             assertThat(e.getMessage()).isNotEqualTo("");
         }
+    }
+
+    @Test
+    void making_overlapping_meetings_for_these_same_participants_is_inpossible_starting_meeting_before_start_previous_ending_after_previous() {
+        // GIVEN
+        String meetingName = "Test Meeting";
+        String meetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = new HashSet<>();
+        participantEmails.add("test@example.com");
+        String meetingDuration = "01:00";
+        Meeting first =
+                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+        String meetingNameSecond = "Test Meeting 2";
+        String meetingDateTimeStringSecond = "01:01:2024 11:00";
+        String meetingDurationSecond = "03:00";
+        // WHEN
+        try {
+            Meeting second =
+                    meetingService.createNewMeeting(meetingNameSecond, meetingDateTimeStringSecond, participantEmails, meetingDurationSecond);
+        } catch (RuntimeException e)
+        // THEN
+        {
+            assertThat(e.getMessage()).isNotEqualTo("");
+        }
+    }
+
+    @Test
+    void making_overlapping_meetings_for_these_same_participants_is_possible_after_previous_meeting() {
+        // GIVEN
+        String meetingName = "Test Meeting";
+        String meetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = new HashSet<>();
+        participantEmails.add("test@example.com");
+        String meetingDuration = "01:00";
+        Meeting first =
+                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+        String meetingNameSecond = "Test Meeting 2";
+        String meetingDateTimeStringSecond = "01:01:2024 13:10";
+        String meetingDurationSecond = "03:00";
+        // WHEN
+        Meeting second =
+                meetingService.createNewMeeting(meetingNameSecond, meetingDateTimeStringSecond, participantEmails, meetingDurationSecond);
+        // THEN
+        List<Meeting> allMeetings = meetingService.getAllMeetings();
+        assertThat(allMeetings).hasSize(2);
+    }
+    @Test
+    void making_overlapping_meetings_for_these_same_participants_is_possible_before_previous_meeting() {
+        // GIVEN
+        String meetingName = "Test Meeting";
+        String meetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = new HashSet<>();
+        participantEmails.add("test@example.com");
+        String meetingDuration = "01:00";
+        Meeting first =
+                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+        String meetingNameSecond = "Test Meeting 2";
+        String meetingDateTimeStringSecond = "01:01:2024 10:00";
+        String meetingDurationSecond = "01:00";
+        // WHEN
+        Meeting second =
+                meetingService.createNewMeeting(meetingNameSecond, meetingDateTimeStringSecond, participantEmails, meetingDurationSecond);
+        // THEN
+        List<Meeting> allMeetings = meetingService.getAllMeetings();
+        assertThat(allMeetings).hasSize(2);
     }
 
 }

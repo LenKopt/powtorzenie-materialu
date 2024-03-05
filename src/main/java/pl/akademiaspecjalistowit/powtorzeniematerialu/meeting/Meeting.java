@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -31,7 +30,7 @@ public class Meeting {
 
     }
 
-    public static LocalDateTime parseStringToDate(String dateString) {
+    private static LocalDateTime parseStringToDate(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm");
         try {
             return LocalDateTime.parse(dateString, formatter);
@@ -40,7 +39,7 @@ public class Meeting {
         }
     }
 
-    public static Duration parseDurationFromString(String durationString) {
+    private static Duration parseDurationFromString(String durationString) {
         String[] parts = durationString.split(":");
         if (parts.length != 2) {
             throw new MeetingException("Nieprawidłowy format. Oczekiwano formatu HH:MM.");
@@ -94,12 +93,30 @@ public class Meeting {
         return meetingDuration;
     }
 
-    public boolean checkEmailSetsForDuplicates(Meeting other) {
+    private boolean emailHasMeetingOnThisTime(Meeting other) {
         for (String email : this.getParticipantEmail()) {
             if (other.getParticipantEmail().contains(email)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean overlapping_meetings(Meeting other) {
+        for (String email : this.getParticipantEmail()) {
+            LocalDateTime entThisMeeting = this.getDateAndTime().plus(getMeetingDuration());
+            if (other.getParticipantEmail().contains(email)) {
+                if ((this.getDateAndTime().compareTo(other.getDateAndTime()) == -1 &&
+                        entThisMeeting.compareTo(other.getDateAndTime()) == -1) ||
+                        (entThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1 &&
+                                entThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean duplicateExist(Meeting other) {
+        return overlapping_meetings(other) && emailHasMeetingOnThisTime(other);
     }
 }

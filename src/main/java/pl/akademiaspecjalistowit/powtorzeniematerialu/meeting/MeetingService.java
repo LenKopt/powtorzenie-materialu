@@ -17,7 +17,7 @@ public class MeetingService {
                                     String meetingDuration) {
 
         Meeting meeting = new Meeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
-        boolean meetingsOverlap = checkEmail(participantEmail, meetingDateTimeString, meetingDuration, meeting);
+        boolean meetingsOverlap = participantHasMeeting(meeting);
         if (meetingsOverlap) {
             throw new MeetingException("Ten email już jest w jednym ze spotkań. Nie ma możliwości dodać takie spotkanie.");
         }
@@ -30,22 +30,13 @@ public class MeetingService {
         return meetingRepository.findAll();
     }
 
-    private boolean checkEmail(Set<String> newEmail, String newMeetingDateTimeString, String newMeetingDurationString, Meeting meeting) {
+    private boolean participantHasMeeting(Meeting meeting) {
         List<Meeting> allMeetings = getAllMeetings();
         for (int i = 0; i < allMeetings.size(); i++) {
-            Meeting nextMeeting = allMeetings.get(i);
-            Set<String> checkedListParticipantEmails = nextMeeting.getParticipantEmail();
+            Meeting otherMeeting = allMeetings.get(i);
+            Set<String> checkedListParticipantEmails = otherMeeting.getParticipantEmail();
             for (int j = 0; j < checkedListParticipantEmails.size(); j++) {
-                LocalDateTime startNewMeeting = Meeting.parseStringToDate(newMeetingDateTimeString);
-                Duration newMeetingDuration = Meeting.parseDurationFromString(newMeetingDurationString);
-                LocalDateTime endNewMeeting = startNewMeeting.plus(newMeetingDuration);
-                if (meeting.checkEmailSetsForDuplicates(nextMeeting)) {
-                    if ((startNewMeeting.compareTo(nextMeeting.getDateAndTime()) == -1 &&
-                            endNewMeeting.compareTo(nextMeeting.getDateAndTime()) == -1) ||
-                            (startNewMeeting.compareTo(nextMeeting.getDateAndTime().plus(nextMeeting.getMeetingDuration())) == 1 &&
-                                    endNewMeeting.compareTo(nextMeeting.getDateAndTime().plus(nextMeeting.getMeetingDuration())) == 1)) {
-                        return false;
-                    }
+                if (meeting.duplicateExist(otherMeeting)){
                     return true;
                 }
             }
