@@ -18,8 +18,11 @@ public class MeetingService {
         return meeting;
     }
 
-
     public List<Meeting> getAllMeetings() {
         return meetingRepository.findAll();
+    }
+
+    public List<Meeting> getAllMeetingsByEmail(String email) {
+        return meetingRepository.findAllbyEmail(email);
     }
 }

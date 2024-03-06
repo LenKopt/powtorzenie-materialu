@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
 
@@ -36,6 +37,7 @@ public class MeetingApp {
         System.out.println("1) Nowe spotkanie");
         System.out.println("2) Pokaż wszystkie spotkania");
         System.out.println("3) Usuń spotkanie");
+        System.out.println("4) Pokaż spotkania zgodnie z podanym email");
         System.out.print("Wpisz komendę: ");
         String command = scanner.nextLine();
 
@@ -49,6 +51,9 @@ public class MeetingApp {
             case "3":
                 deleteMeeting(scanner);
                 break;
+            case "4":
+                showMeetingsByEmail(scanner);
+                break;
             case "exit":
                 System.out.println("Zamykanie aplikacji...");
                 return true;
@@ -61,6 +66,20 @@ public class MeetingApp {
 
     private void showMeetings() {
         List<Meeting> allMeetings = meetingService.getAllMeetings();
+        if (allMeetings.isEmpty()) {
+            System.out.println("Brak spotkań");
+            return;
+        }
+        for (Meeting meeting : allMeetings) {
+            System.out.println(meeting);
+        }
+    }
+
+    private void showMeetingsByEmail(Scanner scanner) {
+        System.out.println("Podaj email: ");
+        String email = scanner.nextLine();
+
+        List<Meeting> allMeetings = meetingService.getAllMeetingsByEmail(email);
         if (allMeetings.isEmpty()) {
             System.out.println("Brak spotkań");
             return;
@@ -94,7 +113,7 @@ public class MeetingApp {
         }
 
         Meeting newMeeting =
-            meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
+                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmail, meetingDuration);
 
         System.out.println("Spotkanie " + newMeeting + " zostało utworzone.");
     }

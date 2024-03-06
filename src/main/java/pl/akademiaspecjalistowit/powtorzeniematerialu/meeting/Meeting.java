@@ -81,4 +81,7 @@ public class Meeting {
         return Objects.hash(meetingId, name, dateAndTime, participantEmail, meetingDuration);
     }
 
+    public Set<String> getParticipantEmail() {
+        return Set.copyOf(participantEmail);
+    }
 }
