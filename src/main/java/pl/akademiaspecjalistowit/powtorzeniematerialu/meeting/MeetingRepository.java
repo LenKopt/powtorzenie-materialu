@@ -20,12 +20,14 @@ public class MeetingRepository {
 
     public List<Meeting> findAllbyEmail(String email) {
         List<Meeting> listMeetings = new ArrayList<>();
+
         for (Meeting actualMeeting : meetings.values()) {
             Set<String> actualSetEmails = actualMeeting.getParticipantEmail();
             if (actualSetEmails.contains(email)) {
                 listMeetings.add(actualMeeting);
             }
         }
+
         return listMeetings;
     }
 }
