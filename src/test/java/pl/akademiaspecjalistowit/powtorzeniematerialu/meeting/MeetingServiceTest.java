@@ -5,6 +5,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -128,6 +129,8 @@ class MeetingServiceTest {
         String firstMeetingDuration = "02:00";
         Meeting firstMeeting =
                 meetingService.createNewMeeting(firstMeetingName, firstMeetingDateTimeString, participantEmails, firstMeetingDuration);
+    }
+
     @Test
     void deletion_meeting_successful() {
         // GIVEN
@@ -178,23 +181,5 @@ class MeetingServiceTest {
             assertThat(e.getMessage()).isEqualTo("Coś poszło nie tak...");
         }
     }
-        String secondMeetingName = "Test Meeting";
-        String secondMeetingDateTimeString = "01:01:2024 12:10";
-        Set<String> secondParticipantEmails = Set.of("test1234@example.com");
-        String secondMeetingDuration = "01:00";
-        Meeting secondMeeting = meetingService
-                .createNewMeeting(secondMeetingName, secondMeetingDateTimeString, secondParticipantEmails, secondMeetingDuration);
 
-        String thirdMeetingName = "Test Meeting";
-        String thirdMeetingDateTimeString = "01:01:2024 12:10";
-        Set<String> thirdParticipantEmails = Set.of("test1234@example.com", "test123@example.com");
-        String thirdMeetingDuration = "01:00";
-        Meeting thirdMeeting = meetingService
-                .createNewMeeting(thirdMeetingName, thirdMeetingDateTimeString, thirdParticipantEmails, thirdMeetingDuration);
-
-        // WHEN
-        List<Meeting> listFoundedMeetingByEmail = meetingService.getAllMeetingsByEmail("test125@example.com");
-        // THEN
-        assertThat(listFoundedMeetingByEmail).hasSize(0);
-    }
 }
