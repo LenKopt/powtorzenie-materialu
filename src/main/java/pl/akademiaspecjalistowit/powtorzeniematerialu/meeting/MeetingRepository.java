@@ -30,4 +30,12 @@ public class MeetingRepository {
 
         return listMeetings;
     }
+
+    public Meeting remove(Long id) {
+        try {
+            return meetings.remove(id);
+        } catch (RuntimeException e) {
+            throw new MeetingException("Coś poszło nie tak...");
+        }
+    }
 }

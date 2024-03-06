@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingException;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
 
 public class MeetingApp {
@@ -70,8 +71,8 @@ public class MeetingApp {
             System.out.println("Brak spotkań");
             return;
         }
-        for (Meeting meeting : allMeetings) {
-            System.out.println(meeting);
+        for (int i = 0; i < allMeetings.size(); i++) {
+            System.out.println("№ " + (i + 1) + " - " + allMeetings.get(i));
         }
     }
 
@@ -119,7 +120,18 @@ public class MeetingApp {
     }
 
     private void deleteMeeting(Scanner scanner) {
-        System.out.println("Usuwanie spotkań nie zostało jeszcze zaimplementowane");
+        showMeetings();
+        if (meetingService.getAllMeetings().size()==0){
+            return;
+        }
+        System.out.println("Podaj numer spotkania zgodnie z listą: ");
+        String meetingId = scanner.nextLine();
+        try {
+            meetingService.removeMeeting(Long.parseLong(meetingId) - 1);
+            System.out.println("Spotkanie z numerem " + meetingId + " zostało usunięte!");
+        } catch (MeetingException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

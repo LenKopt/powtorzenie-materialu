@@ -18,8 +18,13 @@ public class MeetingService {
         return meeting;
     }
 
+
     public List<Meeting> getAllMeetings() {
         return meetingRepository.findAll();
+    }
+
+    public Meeting removeMeeting(Long id) {
+        return meetingRepository.remove(id);
     }
 
     public List<Meeting> getAllMeetingsByEmail(String email) {
