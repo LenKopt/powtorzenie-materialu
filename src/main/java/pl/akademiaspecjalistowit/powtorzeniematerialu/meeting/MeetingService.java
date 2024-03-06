@@ -26,4 +26,8 @@ public class MeetingService {
     public Meeting removeMeeting(Long id) {
         return meetingRepository.remove(id);
     }
+
+    public List<Meeting> getAllMeetingsByEmail(String email) {
+        return meetingRepository.findAllbyEmail(email);
+    }
 }

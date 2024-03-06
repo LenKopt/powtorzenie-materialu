@@ -1,8 +1,6 @@
 package pl.akademiaspecjalistowit.powtorzeniematerialu.meeting;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MeetingRepository {
 
@@ -18,6 +16,19 @@ public class MeetingRepository {
 
     public List<Meeting> findAll() {
         return meetings.values().stream().toList();
+    }
+
+    public List<Meeting> findAllbyEmail(String email) {
+        List<Meeting> listMeetings = new ArrayList<>();
+
+        for (Meeting actualMeeting : meetings.values()) {
+            Set<String> actualSetEmails = actualMeeting.getParticipantEmail();
+            if (actualSetEmails.contains(email)) {
+                listMeetings.add(actualMeeting);
+            }
+        }
+
+        return listMeetings;
     }
 
     public Meeting remove(Long id) {

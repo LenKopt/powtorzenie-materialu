@@ -91,6 +91,47 @@ class MeetingServiceTest {
     }
 
     @Test
+    void searching_meetings_by_email_with_successful_result() {
+        // GIVEN
+        String firstMeetingName = "Test Meeting";
+        String firstMeetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = Set.of("test123@example.com");
+        String firstMeetingDuration = "02:00";
+        Meeting firstMeeting =
+                meetingService.createNewMeeting(firstMeetingName, firstMeetingDateTimeString, participantEmails, firstMeetingDuration);
+
+        String secondMeetingName = "Test Meeting";
+        String secondMeetingDateTimeString = "01:01:2024 12:10";
+        Set<String> secondParticipantEmails = Set.of("test1234@example.com");
+        String secondMeetingDuration = "01:00";
+        Meeting secondMeeting = meetingService
+                .createNewMeeting(secondMeetingName, secondMeetingDateTimeString, secondParticipantEmails, secondMeetingDuration);
+
+        String thirdMeetingName = "Test Meeting";
+        String thirdMeetingDateTimeString = "01:01:2024 12:10";
+        Set<String> thirdParticipantEmails = Set.of("test1234@example.com", "test123@example.com");
+        String thirdMeetingDuration = "01:00";
+        Meeting thirdMeeting = meetingService
+                .createNewMeeting(thirdMeetingName, thirdMeetingDateTimeString, thirdParticipantEmails, thirdMeetingDuration);
+
+        // WHEN
+        List<Meeting> listFoundedMeetingByEmail = meetingService.getAllMeetingsByEmail("test123@example.com");
+        // THEN
+        assertThat(listFoundedMeetingByEmail).hasSize(2);
+    }
+
+    @Test
+    void searching_meetings_by_email_with_result_zero() {
+        // GIVEN
+        String firstMeetingName = "Test Meeting";
+        String firstMeetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = Set.of("test123@example.com");
+        String firstMeetingDuration = "02:00";
+        Meeting firstMeeting =
+                meetingService.createNewMeeting(firstMeetingName, firstMeetingDateTimeString, participantEmails, firstMeetingDuration);
+    }
+
+    @Test
     void deletion_meeting_successful() {
         // GIVEN
         String meetingName = "Test Meeting";
@@ -140,4 +181,5 @@ class MeetingServiceTest {
             assertThat(e.getMessage()).isEqualTo("Coś poszło nie tak...");
         }
     }
+
 }
