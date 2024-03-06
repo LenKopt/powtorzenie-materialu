@@ -19,4 +19,12 @@ public class MeetingRepository {
     public List<Meeting> findAll() {
         return meetings.values().stream().toList();
     }
+
+    public Meeting remove(Long id) {
+        try {
+            return meetings.remove(id);
+        } catch (RuntimeException e) {
+            throw new MeetingException("Coś poszło nie tak...");
+        }
+    }
 }

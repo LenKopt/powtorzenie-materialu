@@ -22,4 +22,8 @@ public class MeetingService {
     public List<Meeting> getAllMeetings() {
         return meetingRepository.findAll();
     }
+
+    public Meeting removeMeeting(Long id) {
+        return meetingRepository.remove(id);
+    }
 }
