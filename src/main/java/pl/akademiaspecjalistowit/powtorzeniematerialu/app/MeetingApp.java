@@ -107,7 +107,7 @@ public class MeetingApp {
             participantEmail.add(scanner.nextLine());
             System.out.println("Chcesz dodać więcej uczestników?: (T/N)");
             String decission = scanner.nextLine();
-            if (decission.equals("N")) {
+            if (decission.equalsIgnoreCase("N")) {
                 stop = true;
             }
         }
