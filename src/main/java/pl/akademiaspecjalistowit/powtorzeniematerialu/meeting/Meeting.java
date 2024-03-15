@@ -30,7 +30,7 @@ public class Meeting {
 
     }
 
-    private LocalDateTime parseStringToDate(String dateString) {
+    private static LocalDateTime parseStringToDate(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm");
         try {
             return LocalDateTime.parse(dateString, formatter);
@@ -39,7 +39,7 @@ public class Meeting {
         }
     }
 
-    public static Duration parseDurationFromString(String durationString) {
+    private static Duration parseDurationFromString(String durationString) {
         String[] parts = durationString.split(":");
         if (parts.length != 2) {
             throw new MeetingException("Nieprawidłowy format. Oczekiwano formatu HH:MM.");
@@ -53,12 +53,12 @@ public class Meeting {
     @Override
     public String toString() {
         return "Meeting{" +
-            "meetingId=" + meetingId +
-            ", name='" + name + '\'' +
-            ", dateAndTime=" + dateAndTime +
-            ", participantEmail=" + participantEmail +
-            ", meetingDuration=" + meetingDuration +
-            '}';
+                "meetingId=" + meetingId +
+                ", name='" + name + '\'' +
+                ", dateAndTime=" + dateAndTime +
+                ", participantEmail=" + participantEmail +
+                ", meetingDuration=" + meetingDuration +
+                '}';
     }
 
     @Override
@@ -71,17 +71,13 @@ public class Meeting {
         }
         Meeting meeting = (Meeting) o;
         return Objects.equals(meetingId, meeting.meetingId) && Objects.equals(name, meeting.name) &&
-            Objects.equals(dateAndTime, meeting.dateAndTime) &&
-            Objects.equals(participantEmail, meeting.participantEmail) &&
-            Objects.equals(meetingDuration, meeting.meetingDuration);
+                Objects.equals(dateAndTime, meeting.dateAndTime) &&
+                Objects.equals(participantEmail, meeting.participantEmail) &&
+                Objects.equals(meetingDuration, meeting.meetingDuration);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(meetingId, name, dateAndTime, participantEmail, meetingDuration);
-    }
-
-    public Set<String> getParticipantEmail() {
-        return Set.copyOf(participantEmail);
     }
 }
