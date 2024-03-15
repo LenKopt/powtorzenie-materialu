@@ -38,6 +38,7 @@ public class MeetingApp {
         System.out.println("1) Nowe spotkanie");
         System.out.println("2) Pokaż wszystkie spotkania");
         System.out.println("3) Usuń spotkanie");
+        System.out.println("4) Pokaż spotkania zgodnie z podanym email");
         System.out.print("Wpisz komendę: ");
         String command = scanner.nextLine();
 
@@ -51,6 +52,9 @@ public class MeetingApp {
             case "3":
                 deleteMeeting(scanner);
                 break;
+            case "4":
+                showMeetingsByEmail(scanner);
+                break;
             case "exit":
                 System.out.println("Zamykanie aplikacji...");
                 return true;
@@ -63,6 +67,20 @@ public class MeetingApp {
 
     private void showMeetings() {
         List<Meeting> allMeetings = meetingService.getAllMeetings();
+        if (allMeetings.isEmpty()) {
+            System.out.println("Brak spotkań");
+            return;
+        }
+        for (int i = 0; i < allMeetings.size(); i++) {
+            System.out.println("№ " + (i + 1) + " - " + allMeetings.get(i));
+        }
+    }
+
+    private void showMeetingsByEmail(Scanner scanner) {
+        System.out.println("Podaj email: ");
+        String email = scanner.nextLine();
+
+        List<Meeting> allMeetings = meetingService.getAllMeetingsByEmail(email);
         if (allMeetings.isEmpty()) {
             System.out.println("Brak spotkań");
             return;
@@ -90,7 +108,7 @@ public class MeetingApp {
             participantEmail.add(scanner.nextLine());
             System.out.println("Chcesz dodać więcej uczestników?: (T/N)");
             String decission = scanner.nextLine();
-            if (decission.toUpperCase().equals("N")) {
+            if (decission.equals("N")) {
                 stop = true;
             }
         }
@@ -102,7 +120,18 @@ public class MeetingApp {
     }
 
     private void deleteMeeting(Scanner scanner) {
-        System.out.println("Usuwanie spotkań nie zostało jeszcze zaimplementowane");
+        showMeetings();
+        if (meetingService.getAllMeetings().size()==0){
+            return;
+        }
+        System.out.println("Podaj numer spotkania zgodnie z listą: ");
+        String meetingId = scanner.nextLine();
+        try {
+            meetingService.removeMeeting(Long.parseLong(meetingId) - 1);
+            System.out.println("Spotkanie z numerem " + meetingId + " zostało usunięte!");
+        } catch (MeetingException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
