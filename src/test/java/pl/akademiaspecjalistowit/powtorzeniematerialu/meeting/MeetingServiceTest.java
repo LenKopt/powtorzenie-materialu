@@ -94,19 +94,24 @@ class MeetingServiceTest {
         assertThat(allMeetings).hasSize(1);
     }
 
-    @Test
-    void making_overlapping_meetings_for_these_same_participants_is_inpossible_ending_meeting_later_start_previous() {
-        // GIVEN
+    private Meeting prepareValidMeeting() {
         String meetingName = "Test Meeting";
         String meetingDateTimeString = "01:01:2024 12:00";
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
         String meetingDuration = "02:00";
-        Meeting first =
-                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+        return meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+    }
+
+    @Test
+    void making_overlapping_meetings_for_these_same_participants_is_inpossible_ending_meeting_later_start_previous() {
+        // GIVEN
+        prepareValidMeeting();
         String meetingNameSecond = "Test Meeting 2";
         String meetingDateTimeStringSecond = "01:01:2024 11:30";
         String meetingDurationSecond = "01:00";
+        Set<String> participantEmails = new HashSet<>();
+        participantEmails.add("test@example.com");
         // WHEN
         try {
             Meeting second =
@@ -121,13 +126,9 @@ class MeetingServiceTest {
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_inpossible_starting_meeting_before_start_previous_ending_after_previous() {
         // GIVEN
-        String meetingName = "Test Meeting";
-        String meetingDateTimeString = "01:01:2024 12:00";
+        prepareValidMeeting();
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
-        String meetingDuration = "01:00";
-        Meeting first =
-                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
         String meetingNameSecond = "Test Meeting 2";
         String meetingDateTimeStringSecond = "01:01:2024 11:00";
         String meetingDurationSecond = "03:00";
@@ -145,13 +146,9 @@ class MeetingServiceTest {
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_possible_after_previous_meeting() {
         // GIVEN
-        String meetingName = "Test Meeting";
-        String meetingDateTimeString = "01:01:2024 12:00";
+        prepareValidMeeting();
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
-        String meetingDuration = "01:00";
-        Meeting first =
-                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
         String meetingNameSecond = "Test Meeting 2";
         String meetingDateTimeStringSecond = "01:01:2024 13:10";
         String meetingDurationSecond = "03:00";
@@ -162,16 +159,13 @@ class MeetingServiceTest {
         List<Meeting> allMeetings = meetingService.getAllMeetings();
         assertThat(allMeetings).hasSize(2);
     }
+
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_possible_before_previous_meeting() {
         // GIVEN
-        String meetingName = "Test Meeting";
-        String meetingDateTimeString = "01:01:2024 12:00";
+        prepareValidMeeting();
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
-        String meetingDuration = "01:00";
-        Meeting first =
-                meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
         String meetingNameSecond = "Test Meeting 2";
         String meetingDateTimeStringSecond = "01:01:2024 10:00";
         String meetingDurationSecond = "01:00";
