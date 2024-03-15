@@ -245,7 +245,7 @@ class MeetingServiceTest {
                 .createNewMeeting(secondMeetingName, secondMeetingDateTimeString, secondParticipantEmails, secondMeetingDuration);
 
         String thirdMeetingName = "Test Meeting";
-        String thirdMeetingDateTimeString = "01:01:2024 12:10";
+        String thirdMeetingDateTimeString = "01:01:2024 14:10";
         Set<String> thirdParticipantEmails = Set.of("test1234@example.com", "test123@example.com");
         String thirdMeetingDuration = "01:00";
         Meeting thirdMeeting = meetingService
@@ -275,7 +275,7 @@ class MeetingServiceTest {
                 .createNewMeeting(secondMeetingName, secondMeetingDateTimeString, secondParticipantEmails, secondMeetingDuration);
 
         String thirdMeetingName = "Test Meeting";
-        String thirdMeetingDateTimeString = "01:01:2024 12:10";
+        String thirdMeetingDateTimeString = "01:01:2024 14:10";
         Set<String> thirdParticipantEmails = Set.of("test1234@example.com", "test123@example.com");
         String thirdMeetingDuration = "01:00";
         Meeting thirdMeeting = meetingService

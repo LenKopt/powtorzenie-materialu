@@ -80,4 +80,38 @@ public class Meeting {
     public int hashCode() {
         return Objects.hash(meetingId, name, dateAndTime, participantEmail, meetingDuration);
     }
+    public Set<String> getParticipantEmail() {
+        return Set.copyOf(participantEmail);
+    }
+    private boolean overlapping_meetings(Meeting other) {
+        for (String email : this.getParticipantEmail()) {
+            LocalDateTime entThisMeeting = this.getDateAndTime().plus(getMeetingDuration());
+            if (other.getParticipantEmail().contains(email)) {
+                if ((this.getDateAndTime().compareTo(other.getDateAndTime()) == -1 &&
+                        entThisMeeting.compareTo(other.getDateAndTime()) == -1) ||
+                        (entThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1 &&
+                                entThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean duplicateExist(Meeting other) {
+        return overlapping_meetings(other) && emailHasMeetingOnThisTime(other);
+    }
+    public Duration getMeetingDuration() {
+        return meetingDuration;
+    }
+    public LocalDateTime getDateAndTime() {
+        return dateAndTime;
+    }
+    private boolean emailHasMeetingOnThisTime(Meeting other) {
+        for (String email : this.getParticipantEmail()) {
+            if (other.getParticipantEmail().contains(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
