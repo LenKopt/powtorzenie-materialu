@@ -43,6 +43,12 @@ public class MeetingService {
         }
         return false;
     }
+    public List<Meeting> getAllMeetingsByEmail(String email) {
+        return meetingRepository.findAllbyEmail(email);
+    }
+    public Meeting removeMeeting(Long id) {
+        return meetingRepository.remove(id);
+    }
 }
 
 
