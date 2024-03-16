@@ -36,16 +36,18 @@ public class MeetingService {
             Meeting otherMeeting = allMeetings.get(i);
             Set<String> checkedListParticipantEmails = otherMeeting.getParticipantEmail();
             for (int j = 0; j < checkedListParticipantEmails.size(); j++) {
-                if (meeting.duplicateExist(otherMeeting)){
+                if (meeting.duplicateExist(otherMeeting)) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     public List<Meeting> getAllMeetingsByEmail(String email) {
         return meetingRepository.findAllbyEmail(email);
     }
+
     public Meeting removeMeeting(Long id) {
         return meetingRepository.remove(id);
     }

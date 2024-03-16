@@ -94,7 +94,7 @@ class MeetingServiceTest {
         assertThat(allMeetings).hasSize(1);
     }
 
-    private Meeting prepareValidMeeting() {
+    private Meeting prepareValidMeetingDurationTwoHours() {
         String meetingName = "Test Meeting";
         String meetingDateTimeString = "01:01:2024 12:00";
         Set<String> participantEmails = new HashSet<>();
@@ -106,7 +106,7 @@ class MeetingServiceTest {
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_inpossible_ending_meeting_later_start_previous() {
         // GIVEN
-        prepareValidMeeting();
+        prepareValidMeetingDurationTwoHours();
         String meetingNameSecond = "Test Meeting 2";
         String meetingDateTimeStringSecond = "01:01:2024 11:30";
         String meetingDurationSecond = "01:00";
@@ -126,7 +126,7 @@ class MeetingServiceTest {
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_inpossible_starting_meeting_before_start_previous_ending_after_previous() {
         // GIVEN
-        prepareValidMeeting();
+        prepareValidMeetingDurationTwoHours();
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
         String meetingNameSecond = "Test Meeting 2";
@@ -146,7 +146,7 @@ class MeetingServiceTest {
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_possible_after_previous_meeting() {
         // GIVEN
-        prepareValidMeeting();
+        prepareValidMeetingDurationOneHour();
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
         String meetingNameSecond = "Test Meeting 2";
@@ -160,10 +160,19 @@ class MeetingServiceTest {
         assertThat(allMeetings).hasSize(2);
     }
 
+    private Meeting prepareValidMeetingDurationOneHour() {
+        String meetingName = "Test Meeting";
+        String meetingDateTimeString = "01:01:2024 12:00";
+        Set<String> participantEmails = new HashSet<>();
+        participantEmails.add("test@example.com");
+        String meetingDuration = "01:00";
+        return meetingService.createNewMeeting(meetingName, meetingDateTimeString, participantEmails, meetingDuration);
+    }
+
     @Test
     void making_overlapping_meetings_for_these_same_participants_is_possible_before_previous_meeting() {
         // GIVEN
-        prepareValidMeeting();
+        prepareValidMeetingDurationTwoHours();
         Set<String> participantEmails = new HashSet<>();
         participantEmails.add("test@example.com");
         String meetingNameSecond = "Test Meeting 2";
@@ -227,6 +236,7 @@ class MeetingServiceTest {
             assertThat(e.getMessage()).isEqualTo("Coś poszło nie tak...");
         }
     }
+
     @Test
     void searching_meetings_by_email_with_successful_result() {
         // GIVEN

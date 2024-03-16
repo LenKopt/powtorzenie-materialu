@@ -80,18 +80,30 @@ public class Meeting {
     public int hashCode() {
         return Objects.hash(meetingId, name, dateAndTime, participantEmail, meetingDuration);
     }
+
     public Set<String> getParticipantEmail() {
         return Set.copyOf(participantEmail);
     }
+
     private boolean overlapping_meetings(Meeting other) {
         for (String email : this.getParticipantEmail()) {
-            LocalDateTime entThisMeeting = this.getDateAndTime().plus(getMeetingDuration());
+            LocalDateTime startThisMeeting = this.getDateAndTime();
+            LocalDateTime endThisMeeting = this.getDateAndTime().plus(this.getMeetingDuration());
+            LocalDateTime startOtherMeeting = other.getDateAndTime();
+            LocalDateTime endOtherMeeting = other.getDateAndTime().plus(other.getMeetingDuration());
             if (other.getParticipantEmail().contains(email)) {
-                if ((this.getDateAndTime().compareTo(other.getDateAndTime()) == -1 &&
-                        entThisMeeting.compareTo(other.getDateAndTime()) == -1) ||
-                        (entThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1 &&
-                                entThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1))
+                if (startOtherMeeting.isAfter(endThisMeeting)) {
                     return false;
+                }
+                if (startThisMeeting.isAfter(endOtherMeeting)) {
+                    return false;
+                }
+//                if ((this.getDateAndTime().compareTo(other.getDateAndTime()) == -1 &&
+//                        endThisMeeting.compareTo(other.getDateAndTime()) == -1) ||
+//                        (this.getDateAndTime().compareTo(other.getDateAndTime()) == 1) &&
+//                                endThisMeeting.compareTo(other.getDateAndTime().plus(other.getMeetingDuration())) == 1)
+//                    ;
+//                return false;
             }
         }
         return true;
@@ -100,12 +112,15 @@ public class Meeting {
     public boolean duplicateExist(Meeting other) {
         return overlapping_meetings(other) && emailHasMeetingOnThisTime(other);
     }
+
     public Duration getMeetingDuration() {
         return meetingDuration;
     }
+
     public LocalDateTime getDateAndTime() {
         return dateAndTime;
     }
+
     private boolean emailHasMeetingOnThisTime(Meeting other) {
         for (String email : this.getParticipantEmail()) {
             if (other.getParticipantEmail().contains(email)) {
