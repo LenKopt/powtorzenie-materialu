@@ -1,5 +1,7 @@
 package pl.akademiaspecjalistowit.powtorzeniematerialu.meeting;
 
+import pl.akademiaspecjalistowit.powtorzeniematerialu.app.MeetingApp;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,9 +10,21 @@ import java.util.Set;
 public class MeetingService {
 
     private MeetingRepository meetingRepository;
+    private static MeetingService meetingService;
 
-    public MeetingService() {
-        meetingRepository = new MeetingRepository();
+    private MeetingService() {
+        meetingRepository = MeetingRepository.getInstance();
+    }
+
+    public static MeetingService getInstance() {
+        if (meetingService == null) {
+            synchronized (MeetingService.class) {
+                if (meetingService == null) {
+                    meetingService = new MeetingService();
+                }
+            }
+        }
+        return meetingService;
     }
 
     public Meeting createNewMeeting(String meetingName, String meetingDateTimeString, Set<String> participantEmail,

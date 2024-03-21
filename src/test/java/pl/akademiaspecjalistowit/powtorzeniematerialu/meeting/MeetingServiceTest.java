@@ -6,8 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 class MeetingServiceTest {
 
@@ -15,7 +18,12 @@ class MeetingServiceTest {
 
     @BeforeEach
     void setUp() {
-        meetingService = new MeetingService();
+        meetingService = MeetingService.getInstance();
+    }
+
+    @AfterEach
+    void tearDown() {
+        MeetingRepository.getInstance().getMeetings().clear();
     }
 
     @Test
