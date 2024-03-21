@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.app.MeetingServiceWithNotification;
@@ -17,7 +18,12 @@ class MeetingServiceTest {
 
     @BeforeEach
     void setUp() {
-        meetingService = new MeetingServiceWithNotification(new MeetingServiceImpl(), new NotificationImp());
+        meetingService = MeetingService.getInstance();
+    }
+
+    @AfterEach
+    void tearDown() {
+        MeetingRepository.getInstance().getMeetings().clear();
     }
 
     @Test

@@ -5,9 +5,21 @@ import java.util.*;
 public class MeetingRepository {
 
     private Map<Long, Meeting> meetings;
+    private static MeetingRepository meetingRepository;
 
-    public MeetingRepository() {
+    private MeetingRepository() {
         meetings = new HashMap<>();
+    }
+
+    public static MeetingRepository getInstance() {
+        if (meetingRepository == null) {
+            synchronized (MeetingRepository.class) {
+                if (meetingRepository == null) {
+                    meetingRepository = new MeetingRepository();
+                }
+            }
+        }
+        return meetingRepository;
     }
 
     public void save(Meeting meeting) {
@@ -37,5 +49,9 @@ public class MeetingRepository {
         } catch (RuntimeException e) {
             throw new MeetingException("Coś poszło nie tak...");
         }
+    }
+
+    public Map<Long, Meeting> getMeetings() {
+        return meetings;
     }
 }
