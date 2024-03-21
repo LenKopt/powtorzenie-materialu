@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import pl.akademiaspecjalistowit.powtorzeniematerialu.communication.NotificationImp;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingException;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingServiceImpl;
 
 public class MeetingApp {
 
@@ -82,7 +84,7 @@ public class MeetingApp {
         System.out.println("Podaj email: ");
         String email = scanner.nextLine();
 
-        List<Meeting> allMeetings = meetingService.getAllMeetingsByEmail(email);
+        List<Meeting> allMeetings = meetingService.getMeetingRepository().findAllbyEmail(email);
         if (allMeetings.isEmpty()) {
             System.out.println("Brak spotkań");
             return;
@@ -129,7 +131,7 @@ public class MeetingApp {
         System.out.println("Podaj numer spotkania zgodnie z listą: ");
         String meetingId = scanner.nextLine();
         try {
-            meetingService.removeMeeting(Long.parseLong(meetingId) - 1);
+            meetingService.getMeetingRepository().remove(Long.parseLong(meetingId) - 1);
             System.out.println("Spotkanie z numerem " + meetingId + " zostało usunięte!");
         } catch (MeetingException e) {
             System.out.println(e.getMessage());
