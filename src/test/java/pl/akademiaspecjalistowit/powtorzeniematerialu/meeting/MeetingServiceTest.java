@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.app.MeetingServiceWithNotification;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.communication.NotificationImp;
 
 class MeetingServiceTest {
 
@@ -15,7 +17,7 @@ class MeetingServiceTest {
 
     @BeforeEach
     void setUp() {
-        meetingService = new MeetingService();
+        meetingService = new MeetingServiceWithNotification(new MeetingServiceImpl(), new NotificationImp());
     }
 
     @Test
@@ -207,7 +209,7 @@ class MeetingServiceTest {
                         OverlappingMeetingDuration);
 
         // WHEN
-        Meeting remotedMeeting = meetingService.removeMeeting(1l);
+        Meeting remotedMeeting = meetingService.getMeetingRepository().remove(1l);
 
         // THEN
         List<Meeting> allMeetings = meetingService.getAllMeetings();
@@ -227,7 +229,7 @@ class MeetingServiceTest {
 
         // WHEN
         try {
-            Meeting remotedMeeting = meetingService.removeMeeting(1l);
+            Meeting remotedMeeting = meetingService.getMeetingRepository().remove(1l);
         } catch (MeetingException e) {
             // THEN
             List<Meeting> allMeetings = meetingService.getAllMeetings();
@@ -262,7 +264,7 @@ class MeetingServiceTest {
                 .createNewMeeting(thirdMeetingName, thirdMeetingDateTimeString, thirdParticipantEmails, thirdMeetingDuration);
 
         // WHEN
-        List<Meeting> listFoundedMeetingByEmail = meetingService.getAllMeetingsByEmail("test123@example.com");
+        List<Meeting> listFoundedMeetingByEmail = meetingService.getMeetingRepository().findAllbyEmail("test123@example.com");
         // THEN
         assertThat(listFoundedMeetingByEmail).hasSize(2);
     }
@@ -292,7 +294,7 @@ class MeetingServiceTest {
                 .createNewMeeting(thirdMeetingName, thirdMeetingDateTimeString, thirdParticipantEmails, thirdMeetingDuration);
 
         // WHEN
-        List<Meeting> listFoundedMeetingByEmail = meetingService.getAllMeetingsByEmail("test125@example.com");
+        List<Meeting> listFoundedMeetingByEmail = meetingService.getMeetingRepository().findAllbyEmail("test125@example.com");
         // THEN
         assertThat(listFoundedMeetingByEmail).hasSize(0);
     }
