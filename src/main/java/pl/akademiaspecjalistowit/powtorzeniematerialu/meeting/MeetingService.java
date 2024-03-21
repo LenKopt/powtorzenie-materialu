@@ -12,11 +12,4 @@ public interface MeetingService {
     List<Meeting> getAllMeetings();
     public MeetingRepository getMeetingRepository();
 
-//    public List<Meeting> getAllMeetingsByEmail(String email) {
-//        return meetingRepository.findAllbyEmail(email);
-//    }
-//
-//    public Meeting removeMeeting(Long id) {
-//        return meetingRepository.remove(id);
-//    }
 }

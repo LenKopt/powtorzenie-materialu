@@ -15,9 +15,7 @@ public class MeetingApp {
 
 
     public MeetingApp() {
-        this.meetingService = MeetingServiceImpl.getInstance();//new MeetingService();
-        System.out.println(this.meetingService);
-        System.out.println(MeetingServiceImpl.getInstance());
+        this.meetingService = MeetingServiceImpl.getInstance();
     }
 
     public void run() {
