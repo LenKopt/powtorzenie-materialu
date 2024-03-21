@@ -9,16 +9,14 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.akademiaspecjalistowit.powtorzeniematerialu.app.MeetingServiceWithNotification;
-import pl.akademiaspecjalistowit.powtorzeniematerialu.communication.NotificationImp;
 
 class MeetingServiceTest {
 
-    private MeetingService meetingService;
+    private MeetingServiceImpl meetingService;
 
     @BeforeEach
     void setUp() {
-        meetingService = MeetingService.getInstance();
+        meetingService = MeetingServiceImpl.getInstance();
     }
 
     @AfterEach

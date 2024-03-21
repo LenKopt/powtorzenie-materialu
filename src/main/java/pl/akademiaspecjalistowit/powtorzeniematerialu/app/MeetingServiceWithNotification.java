@@ -4,15 +4,16 @@ import pl.akademiaspecjalistowit.powtorzeniematerialu.communication.Notification
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingRepository;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingServiceImpl;
 
 import java.util.List;
 import java.util.Set;
 
 public class MeetingServiceWithNotification implements MeetingService {
-    private MeetingService meetingService;
+    private MeetingServiceImpl meetingService;
     private Notification notificationService;
 
-    public MeetingServiceWithNotification(MeetingService meetingService, Notification notificationService) {
+    public MeetingServiceWithNotification(MeetingServiceImpl meetingService, Notification notificationService) {
         this.meetingService = meetingService;
         this.notificationService = notificationService;
     }

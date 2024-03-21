@@ -5,21 +5,19 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import pl.akademiaspecjalistowit.powtorzeniematerialu.communication.NotificationImp;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingException;
-import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingServiceImpl;
 
 public class MeetingApp {
 
-    private MeetingService meetingService;
+    private MeetingServiceImpl meetingService;
 
 
     public MeetingApp() {
-        this.meetingService = MeetingService.getInstance();//new MeetingService();
+        this.meetingService = MeetingServiceImpl.getInstance();//new MeetingService();
         System.out.println(this.meetingService);
-        System.out.println(MeetingService.getInstance());
+        System.out.println(MeetingServiceImpl.getInstance());
     }
 
     public void run() {

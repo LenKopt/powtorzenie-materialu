@@ -6,9 +6,21 @@ import java.util.Set;
 public class MeetingServiceImpl implements MeetingService {
 
     private MeetingRepository meetingRepository;
+    private static MeetingServiceImpl meetingService;
 
-    public MeetingServiceImpl() {
-        meetingRepository = new MeetingRepository();
+    private MeetingServiceImpl() {
+        meetingRepository = MeetingRepository.getInstance();
+    }
+
+    public static MeetingServiceImpl getInstance() {
+        if (meetingService == null) {
+            synchronized (MeetingServiceImpl.class) {
+                if (meetingService == null) {
+                    meetingService = new MeetingServiceImpl();
+                }
+            }
+        }
+        return meetingService;
     }
 
     public Meeting createNewMeeting(String meetingName, String meetingDateTimeString, Set<String> participantEmail,
@@ -45,6 +57,13 @@ public class MeetingServiceImpl implements MeetingService {
     public MeetingRepository getMeetingRepository() {
         return meetingRepository;
     }
+    //    public List<Meeting> getAllMeetingsByEmail(String email) {
+//        return meetingRepository.findAllbyEmail(email);
+//    }
+//
+//    public Meeting removeMeeting(Long id) {
+//        return meetingRepository.remove(id);
+//    }
 }
 
 
