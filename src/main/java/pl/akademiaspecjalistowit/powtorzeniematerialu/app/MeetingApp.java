@@ -5,17 +5,19 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import pl.akademiaspecjalistowit.powtorzeniematerialu.communication.NotificationImp;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.Meeting;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingException;
+import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingService;
 import pl.akademiaspecjalistowit.powtorzeniematerialu.meeting.MeetingServiceImpl;
 
 public class MeetingApp {
 
-    private MeetingServiceImpl meetingService;
+    private MeetingService meetingService;
 
 
     public MeetingApp() {
-        this.meetingService = MeetingServiceImpl.getInstance();
+        this.meetingService = new MeetingServiceWithNotification(MeetingServiceImpl.getInstance(), new NotificationImp());
     }
 
     public void run() {
@@ -121,7 +123,7 @@ public class MeetingApp {
 
     private void deleteMeeting(Scanner scanner) {
         showMeetings();
-        if (meetingService.getAllMeetings().size()==0){
+        if (meetingService.getAllMeetings().size() == 0) {
             return;
         }
         System.out.println("Podaj numer spotkania zgodnie z listą: ");
